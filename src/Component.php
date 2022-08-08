@@ -63,7 +63,7 @@ abstract class Component implements JsonSerializable
     /**
      * @return array<string, mixed>
      */
-    final public function toArray(): array
+    public function toArray(): array
     {
         $dehydrator = new Dehydrator($this);
 
