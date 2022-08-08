@@ -8,7 +8,9 @@ use SlackPhp\BlockKit\{FauxProperty,
     Property,
     Surfaces\MessageDirective\DeleteOriginal,
     Surfaces\MessageDirective\ReplaceOriginal,
-    Surfaces\MessageDirective\ResponseType};
+    Surfaces\MessageDirective\ResponseType,
+    Surfaces\MessageDirective\UnfurlLinks,
+    Surfaces\MessageDirective\UnfurlMedia};
 use SlackPhp\BlockKit\Blocks\Block;
 use SlackPhp\BlockKit\Collections\{AttachmentCollection, BlockCollection};
 use SlackPhp\BlockKit\Hydration\OmitType;
@@ -31,6 +33,12 @@ class Message extends Surface
 
     #[FauxProperty('delete_original')]
     public ?DeleteOriginal $deleteOriginal;
+
+    #[FauxProperty('unfurl_links')]
+    public ?UnfurlLinks $unfurlLinks;
+
+    #[FauxProperty('unfurl_media')]
+    public ?UnfurlMedia $unfurlMedia;
 
     #[Property, ValidString]
     public ?string $text;
@@ -58,6 +66,8 @@ class Message extends Surface
         ?bool $ephemeral = null,
         ?bool $replaceOriginal = null,
         ?bool $deleteOriginal = null,
+        ?bool $unfurlLinks = null,
+        ?bool $unfurlMedia = null,
     ) {
         parent::__construct($blocks);
         $this->attachments = AttachmentCollection::wrap($attachments);
@@ -67,6 +77,8 @@ class Message extends Surface
         $this->threadTs($threadTs);
         $this->replaceOriginal($replaceOriginal);
         $this->deleteOriginal($deleteOriginal);
+        $this->unfurlLinks($unfurlLinks);
+        $this->unfurlMedia($unfurlMedia);
     }
 
     /**
@@ -103,6 +115,26 @@ class Message extends Surface
     public function deleteOriginal(DeleteOriginal|array|bool|null $deleteOriginal = true): static
     {
         $this->deleteOriginal = DeleteOriginal::fromValue($deleteOriginal);
+
+        return $this;
+    }
+
+    /**
+     * Configures message to "unfurl_links" mode.
+     */
+    public function unfurlLinks(UnfurlLinks|array|bool|null $unfurlLinks = true): static
+    {
+        $this->unfurlLinks = UnfurlLinks::fromValue($unfurlLinks);
+
+        return $this;
+    }
+
+    /**
+     * Configures message to "unfurl_media" mode.
+     */
+    public function unfurlMedia(UnfurlMedia|array|bool|null $unfurlMedia = true): static
+    {
+        $this->unfurlMedia = UnfurlMedia::fromValue($unfurlMedia);
 
         return $this;
     }
