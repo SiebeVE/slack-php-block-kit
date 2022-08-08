@@ -115,13 +115,19 @@ enum Type: string
         Parts\PlainText::class            => self::PLAINTEXT,
     ];
 
-    public static function fromClass(string $class): self
+    public static function fromClass(Component $component): self
     {
-        if (!isset(self::TYPE_MAP[$class])) {
-            throw new Exception('No type for class: %s', [$class]);
+        $componentClass = $component::class;
+        if (!isset(self::TYPE_MAP[$componentClass])) {
+            foreach (self::TYPE_MAP as $typeClass => $value) {
+                if ($component instanceof $typeClass) {
+                    return $value;
+                }
+            }
+            throw new Exception('No type for class: %s', [$componentClass]);
         }
 
-        return self::TYPE_MAP[$class];
+        return self::TYPE_MAP[$componentClass];
     }
 
     public function toClass(): string

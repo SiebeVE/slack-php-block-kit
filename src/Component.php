@@ -18,7 +18,7 @@ abstract class Component implements JsonSerializable
     public function __construct()
     {
         $this->extra = [];
-        $this->type = Type::fromClass(static::class);
+        $this->type = Type::fromClass($this);
         $this->validator = new Validator($this);
     }
 

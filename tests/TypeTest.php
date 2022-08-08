@@ -3,7 +3,7 @@
 namespace SlackPhp\BlockKit\Tests;
 
 use SlackPhp\BlockKit\Blocks\Section;
-use SlackPhp\BlockKit\{Exception, Kit, Type};
+use SlackPhp\BlockKit\{Component, Exception, Kit, Type};
 use Throwable;
 
 /**
@@ -13,13 +13,14 @@ class TypeTest extends TestCase
 {
     public function testCanMapDefinedElementClassToADefinedType(): void
     {
-        $this->assertEquals(Type::SECTION, Type::fromClass(Section::class));
+        $this->assertEquals(Type::SECTION, Type::fromClass(new Section()));
     }
 
     public function testThrowsErrorIfMappingClassesNotRegisteredInTypeMaps(): void
     {
+        $unknownClass = new class () extends Component {};
         $this->expectException(Exception::class);
-        Type::fromClass(Kit::class);
+        Type::fromClass($unknownClass);
     }
 
     public function testCanMapDefinedElementTypeToADefinedClass(): void
