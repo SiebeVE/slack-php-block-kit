@@ -82,7 +82,7 @@ class Dehydrator
             // Handle faux properties.
             $fauxProperty = Reflector::fauxPropertyAttribute($classProperty);
             if ($fauxProperty !== null) {
-                yield from is_array($value) ? array_map($this->resolveValue(...), $value) : $value->toArray();
+                yield from is_array($value) ? array_map($this->resolveValue(...), $value) : (is_string($value) ? $value : $value->toArray());
             }
         }
     }
