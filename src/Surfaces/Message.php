@@ -53,7 +53,7 @@ class Message extends Surface
     #[Property]
     public ?bool $mrkdwn;
 
-    #[FauxProperty('thread_ts'), ValidString]
+    #[Property('thread_ts'), ValidString]
     public ?string $threadTs;
 
     /**
@@ -176,12 +176,8 @@ class Message extends Surface
         return $this;
     }
 
-    public function threadTs(array|string|null $threadTs): static
+    public function threadTs(string|null $threadTs): static
     {
-        if (is_array($threadTs)) {
-            $threadTs = $threadTs['thread_ts'];
-        }
-
         $this->threadTs = $threadTs;
 
         return $this;
