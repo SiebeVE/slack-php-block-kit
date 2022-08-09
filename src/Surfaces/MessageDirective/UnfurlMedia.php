@@ -12,18 +12,18 @@ enum UnfurlMedia
     case DONT_UNFURL_MEDIA;
 
     /**
-     * @return array<string, string>
+     * @return array<string, bool>
      */
     public function toArray(): array
     {
         return match ($this) {
-            self::UNFURL_MEDIA => ['unfurl_media' => 'true'],
-            self::DONT_UNFURL_MEDIA => ['unfurl_media' => 'false'],
+            self::UNFURL_MEDIA => ['unfurl_media' => true],
+            self::DONT_UNFURL_MEDIA => ['unfurl_media' => false],
         };
     }
 
     /**
-     * @param self|array<string, string>|bool|null $data
+     * @param self|array<string, bool>|bool|null $data
      * @return static|null
      */
     public static function fromValue(self|array|bool|null $data): ?self
@@ -37,11 +37,10 @@ enum UnfurlMedia
         }
 
         if (is_array($data)) {
-            $data = array_filter($data);
             return match ($data) {
-                ['unfurl_media' => 'true'] => self::UNFURL_MEDIA,
-                ['unfurl_media' => 'false'] => self::DONT_UNFURL_MEDIA,
-                [] => null,
+                ['unfurl_media' => true] => self::UNFURL_MEDIA,
+                ['unfurl_media' => false] => self::DONT_UNFURL_MEDIA,
+                ['unfurl_media' => null] => null,
                 default => throw new Exception('Invalid Unfurl Media enum encountered: %s', [json_encode($data)]),
             };
         }

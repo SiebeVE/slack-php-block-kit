@@ -8,13 +8,14 @@ use SlackPhp\BlockKit\{FauxProperty,
     Property,
     Surfaces\MessageDirective\DeleteOriginal,
     Surfaces\MessageDirective\ReplaceOriginal,
+    Surfaces\MessageDirective\ReplyBroadcast,
     Surfaces\MessageDirective\ResponseType,
     Surfaces\MessageDirective\UnfurlLinks,
     Surfaces\MessageDirective\UnfurlMedia};
 use SlackPhp\BlockKit\Blocks\Block;
 use SlackPhp\BlockKit\Collections\{AttachmentCollection, BlockCollection};
 use SlackPhp\BlockKit\Hydration\OmitType;
-use SlackPhp\BlockKit\Validation\{RequiresAnyOf, UniqueIds, ValidCollection, ValidString};
+use SlackPhp\BlockKit\Validation\{AllowedWhenPresent, RequiresAnyOf, UniqueIds, ValidCollection, ValidString};
 
 /**
  * @see https://api.slack.com/surfaces
@@ -39,6 +40,9 @@ class Message extends Surface
 
     #[FauxProperty('unfurl_media')]
     public ?UnfurlMedia $unfurlMedia;
+
+    #[FauxProperty('reply_broadcast'), AllowedWhenPresent('threadTs')]
+    public ?ReplyBroadcast $replyBroadcast;
 
     #[Property, ValidString]
     public ?string $text;
@@ -68,6 +72,7 @@ class Message extends Surface
         ?bool $deleteOriginal = null,
         ?bool $unfurlLinks = null,
         ?bool $unfurlMedia = null,
+        ?bool $replyBroadcast = null,
     ) {
         parent::__construct($blocks);
         $this->attachments = AttachmentCollection::wrap($attachments);
@@ -79,6 +84,7 @@ class Message extends Surface
         $this->deleteOriginal($deleteOriginal);
         $this->unfurlLinks($unfurlLinks);
         $this->unfurlMedia($unfurlMedia);
+        $this->replyBroadcast($replyBroadcast);
     }
 
     /**
@@ -135,6 +141,16 @@ class Message extends Surface
     public function unfurlMedia(UnfurlMedia|array|bool|null $unfurlMedia = true): static
     {
         $this->unfurlMedia = UnfurlMedia::fromValue($unfurlMedia);
+
+        return $this;
+    }
+
+    /**
+     * Configures message to "reply_broadcast" mode.
+     */
+    public function replyBroadcast(ReplyBroadcast|array|bool|null $replyBroadcast = true): static
+    {
+        $this->replyBroadcast = ReplyBroadcast::fromValue($replyBroadcast);
 
         return $this;
     }

@@ -6,10 +6,10 @@ namespace SlackPhp\BlockKit\Surfaces\MessageDirective;
 
 use SlackPhp\BlockKit\Exception;
 
-enum UnfurlLinks
+enum ReplyBroadcast
 {
-    case UNFURL_LINKS;
-    case DONT_UNFURL_LINKS;
+    case REPLY_BROADCAST;
+    case DONT_REPLY_BROADCAST;
 
     /**
      * @return array<string, bool>
@@ -17,8 +17,8 @@ enum UnfurlLinks
     public function toArray(): array
     {
         return match ($this) {
-            self::UNFURL_LINKS => ['unfurl_links' => true],
-            self::DONT_UNFURL_LINKS => ['unfurl_links' => false],
+            self::REPLY_BROADCAST => ['reply_broadcast' => true],
+            self::DONT_REPLY_BROADCAST => ['reply_broadcast' => false],
         };
     }
 
@@ -33,15 +33,15 @@ enum UnfurlLinks
         }
 
         if (is_bool($data)) {
-            return $data ? self::UNFURL_LINKS : self::DONT_UNFURL_LINKS;
+            return $data ? self::REPLY_BROADCAST : self::DONT_REPLY_BROADCAST;
         }
 
         if (is_array($data)) {
             return match ($data) {
-                ['unfurl_links' => true] => self::UNFURL_LINKS,
-                ['unfurl_links' => false] => self::DONT_UNFURL_LINKS,
-                ['unfurl_links' => null] => null,
-                default => throw new Exception('Invalid Unfurl Links enum encountered: %s', [json_encode($data)]),
+                ['reply_broadcast' => true] => self::REPLY_BROADCAST,
+                ['reply_broadcast' => false] => self::DONT_REPLY_BROADCAST,
+                ['reply_broadcast' => null] => null,
+                default => throw new Exception('Invalid Reply Broadcast enum encountered: %s', [json_encode($data)]),
             };
         }
 
