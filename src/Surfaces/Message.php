@@ -53,7 +53,7 @@ class Message extends Surface
     #[Property]
     public ?bool $mrkdwn;
 
-    #[Property, ValidString]
+    #[FauxProperty('thread_ts'), ValidString]
     public ?string $threadTs;
 
     /**
